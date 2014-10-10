@@ -1,1 +1,3 @@
-A repository containing done Haskell homework.
+#Haskell#
+----------
+A repository with Haskell tasks.

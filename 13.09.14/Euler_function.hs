@@ -9,3 +9,5 @@ phi x = loop 2 1 x
 	where loop a acc x | x == a = acc
                        | x `gcd'` a == 1 = loop (a + 1) (acc + 1) x
                        | otherwise = loop (a + 1) acc x
+
+phi' x = [m | m <- [1..x], gcd m x == 1]
