@@ -16,12 +16,19 @@ infixl 2 |||
 (P x) ||| (P y) = P (\t -> (x t) ++ (y t))
 
 infixl 3 ||>
-(P x) ||> (P y) = 
+(P a) ||> f = P p where
+    p s = concat [apply (f x) y | (x, y) <- a s]
 
+apply (P p) = p
 
-apply :: Pars s a -> s -> [(a, s)]
-lift :: Pars s a -> (b -> Pars c a)
-many :: Pars s a -> Pars s [a]
-some :: Pars s a -> Pars s [a] -- 1 & more
-opt :: Pars s a -> Pars s (Maybe a)
-eof :: [(a, [c])] -> [a]
+lift (P p) = \_ -> (P p)
+
+lift' p _ = p
+
+many a = val [] ||| a ||> (\x -> many a ||> (\y -> val (x : y)))
+
+some a = a ||> (lift $ many a)
+
+--some :: Pars s a -> Pars s [a] -- 1 & more
+--opt :: Pars s a -> Pars s (Maybe a)
+--eof :: [(a, [c])] -> [a]
